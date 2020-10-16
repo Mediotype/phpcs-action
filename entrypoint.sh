@@ -7,7 +7,7 @@ echo "::add-matcher::${RUNNER_TEMP}/_github_workflow/problem-matcher.json"
 
 if [ "${INPUT_ONLY_CHANGED_FILES}" = "true" ]; then
     echo "Will only check changed files"
-    URL="$(jq -r '.pull_request._links.self.href' "${GITHUB_EVENT_PATH}")/files"
+    URL="$(jq -r '.pull_request._links.self.href' "${GITHUB_EVENT_PATH}")/files?per_page=3000"
 
     CURL_RESULT=$(curl -s -H "Authorization: Bearer ${INPUT_TOKEN}" "${URL}")
     CHANGED_FILES=$(echo "${CURL_RESULT}" | jq -r '.[] | select(.status != "removed") | .filename')
